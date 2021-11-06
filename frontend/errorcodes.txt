@@ -1,0 +1,7 @@
+Status Code     Message                                                                 Reason
+1               Unable to parse given CSV file                                          The call to parse_csv fails
+2               URL provided does not point to CSV file                                 Doesn't match website/csv regex
+3               Error with computing statistics                                         The call to compute_stats fails
+4               Error with computing average with condition                             The call to compute_avg_cond fails
+5               Incompatiable comparison value and comparator operand/returned NaN      Uses < or > with string or compute_avg_cond returns NaN
+6               Internal server error. Try again later                                  The backend is not running or encounters a problem

@@ -1,0 +1,224 @@
+{%load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'mainpage/main.css' %}">
+
+    <title>CSV Stats</title>
+  </head>
+  <body>
+    <div class="background">
+      <div class="wrapper">
+        <div class="wrapper2">
+
+        <h1>Enter a URL to a CSV file below:</h1>
+       
+
+        <form id="all">
+          <div class="row">
+              <button type="submit" class="btn btn-primary col-1">Parse CSV</button>
+              <div class="col-10">
+                {% if csv_site %}
+                  <input type="text" class="form-control" id="csv-url"  name="csv-site" value="{{ csv_site }}" required>
+                {% else %}
+                  <input type="text" class="form-control" id="csv-url"  name="csv-site" placeholder="https://" required>
+                {% endif %}
+              </div>
+          </div>
+
+          <br/>
+
+        
+          <div class="statistics">
+            <div class="row">
+              <p class="col-2">Compute statistics on</p>
+              <div class="col-2">
+                <select class="select-style" name="stats-option" method="get">
+                    {% if numerical_categories %}
+                   
+                        {% for category in numerical_categories %}
+                          <option value={{category}}>{{category}}</button>
+                        {%endfor%}
+                        {% if stats_option %}
+                          <option value={{stats_option}} selected>{{stats_option}}</button>
+                        {% else %}
+                          <option value="--" selected></option>
+                        {% endif %}
+                      {% else %} 
+                        <option value="">Numerical Category</option>
+                      {%endif%}
+                </select>
+              </div>
+            </div>
+
+            <br/>
+
+            <div class="row">
+              <p class="col-2">Compute average of</p>
+              <div class="col-2">
+                <select class="select-style" name="avg-option-1" method="get">
+                    {% if numerical_categories %}
+                        {% for category in numerical_categories %}
+                          <option value={{category}}>{{category}}</button>
+                        {%endfor%}
+                        {% if avg_option_1 %}
+                          <option value={{avg_option_1}} selected>{{avg_option_1}}</button>
+                        {% else %}
+                          <option value="--" selected></option>
+                        {% endif %}
+                      {% else %} 
+                        <option value="">Numerical Category</option>
+                      {%endif%}
+                </select>
+              </div>
+              <p class="col-1">where</p>
+              <div class="col-2">
+                <select class="select-style" name="avg-option-2" method="get">
+                  {% if all_categories %}
+                      {% for category in all_categories %}
+                        <option value={{category}}>{{category}}</button>
+                      {%endfor%}
+                      {% if avg_option_2 %}
+                        <option value={{avg_option_2}} selected>{{avg_option_2}}</button>
+                      {%else %}
+                        <option value="--" selected></option>
+                      {% endif %}
+                    {% else %} 
+                      <option value="">Any Category</option>
+                    {%endif%}
+                </select>
+              </div>
+              <div class="col-2">
+                <select class="select-style" name="avg-option-3" method="get">
+                  {% if all_categories %}
+                    <option value="--" selected></option>
+                    <option value="==">==</option>
+                    <option value="<"><</option>
+                    <option value=">">></option>
+                    {% if avg_option_3 %}
+                        <option value={{avg_option_3}} selected>{{avg_option_3}}</button>
+                    {% endif %}
+                  {% else %} 
+                    <option value="">Relation</option>
+                  {%endif%}
+                </select>
+              </div>
+              {% if avg_option_4%}
+              <input class="col-2" type="comparison-form" class="form-control" name="avg-option-4" id="comparison-value" value="{{avg_option_4}}">
+              {% else %}
+                <input class="col-2" type="comparison-form" class="form-control" name="avg-option-4" id="comparison-value" placeholder="Comparison value">
+              {% endif %}
+            </div> 
+          </div> <!--End of statistics-->
+
+
+          <div class="row mt-lg-4">
+            <div class="col-6 align-items-stretch">
+              <div class="card">
+                <!--Updated at runtime-->
+                <h5>Statistics on a Numerical Categeory</h2>
+                <ul>
+                  {% if Max %}
+                    <li>Max: {{Max}}</li>
+                  {% else %}
+                    <li>Max: 0</li>
+                  {% endif %}
+
+                  {% if Min %}
+                  <li>Min: {{Min}}</li>
+                  {% else %}
+                    <li>Min: 0</li>
+                  {% endif %}
+
+                  {% if Range %}
+                  <li>Range: {{Range}}</li>
+                  {% else %}
+                    <li>Range: 0</li>
+                  {% endif %}
+
+                  {% if Mean %}
+                  <li>Mean: {{Mean}}</li>
+                  {% else %}
+                    <li>Mean: 0</li>
+                  {% endif %}
+
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-6 align-items-stretch">
+              <div class="card">
+                <h5>Average of a Numerical Category with Condition</h5>
+                {% if Avg %}
+                  <p>{{Avg}}</p>
+                {% else %}
+                  <p>0</p>
+                {% endif %}
+                <br/>
+                <br/>
+                <br/>
+              </div>
+            </div>
+          </div>
+
+          <br/><br/>
+          <div class="col text-center">
+            <button style="width:120px" type="submit" class="btn btn-primary btn-lg">Calculate</button>             
+          </div>
+        </form>
+        <br/>
+        
+        <div class="col text-center">
+          <form>
+            <button style="width:120px" type="submit" class="btn btn-primary btn-lg">  Reset  </button>
+          </form>
+        </div>
+       
+
+   
+
+          {% if status_code == 1 %}
+          <div class="error-text">
+            <strong>Unable to parse given CSV file</strong>
+          </div>
+          {% elif status_code == 2 %}
+          <div class="error-text">
+            <strong>URL provided does not point to CSV file</strong>
+          </div>
+          {% elif status_code == 3 %}
+          <div class="error-text">
+            <strong>Error with computing statistics</strong>
+          </div>
+          {% elif status_code == 4 %}
+          <div class="error-text">
+            <strong>Error with compute average with condition</strong>
+          </div>
+          {% elif status_code == 5 %}
+          <div class="error-text">
+            <strong>Incompatiable comparison value and comparator operand/returned NaN</strong>
+          </div>
+          {% elif status_code == 6 %}
+          <div class="error-text">
+            <strong>Internal server error. Try again later.</strong>
+          </div>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+
+    
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
